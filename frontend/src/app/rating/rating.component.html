@@ -1,0 +1,28 @@
+<div>
+  <h2>Đánh giá sản phẩm</h2>
+
+  <!-- Form thêm đánh giá -->
+  <form (ngSubmit)="addRating()">
+    <label for="score">Điểm:</label>
+    <input type="number" id="score" [(ngModel)]="newRating.score" name="score" min="1" max="5" required />
+
+    <label for="comment">Bình luận:</label>
+    <input type="text" id="comment" [(ngModel)]="newRating.comment" name="comment" required />
+
+    <button type="submit">Gửi đánh giá</button>
+  </form>
+
+  <!-- Hiển thị danh sách đánh giá -->
+  <div *ngIf="ratings.length > 0">
+    <h3>Các đánh giá:</h3>
+    <ul>
+      <li *ngFor="let rating of ratings">
+        <strong>Điểm:</strong> {{ rating.score }} -
+        <strong>Bình luận:</strong> {{ rating.comment }}
+      </li>
+    </ul>
+  </div>
+  <div *ngIf="ratings.length === 0">
+    <p>Chưa có đánh giá nào cho sản phẩm này.</p>
+  </div>
+</div>

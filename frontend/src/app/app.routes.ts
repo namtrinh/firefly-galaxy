@@ -49,7 +49,7 @@ import {ListOrderComponent} from "./admin/manage-invoice/list-order/list-order.c
 import {OrderDetailComponent} from "./admin/manage-invoice/order-detail/order-detail.component";
 
 export const routes: Routes = [
-
+  { path: 'product/:id/ratings', component: RatingComponent }, //Rating
   //Test View
   {path: 'a', component: TestComponent},
   {path: 'b', component: Test1Component},

@@ -1,6 +1,7 @@
 package org.galaxy.backend.Exception;
 
 import org.galaxy.backend.ModelDTO.response.ApiResponse;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -51,5 +52,22 @@ public class GlobalExceptionHandle {
         apiResponse.setCode(errorCode.getCode());
         apiResponse.setMessage(errorCode.getMessage());
         return ResponseEntity.badRequest().body(apiResponse);
+    }
+    // Handle Rating Not Found Exception
+    @ExceptionHandler(RatingNotFoundException.class)
+    public ResponseEntity<String> handleRatingNotFoundException(RatingNotFoundException ex) {
+        return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
+    }
+
+    // Handle Invalid Rating Exception
+    @ExceptionHandler(InvalidRatingException.class)
+    public ResponseEntity<String> handleInvalidRatingException(InvalidRatingException ex) {
+        return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
+    }
+
+    // Handle any other exceptions
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<String> handleGeneralException(Exception ex) {
+        return new ResponseEntity<>("An error occurred: " + ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }
