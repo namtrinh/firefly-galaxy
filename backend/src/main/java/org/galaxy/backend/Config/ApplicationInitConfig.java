@@ -27,7 +27,7 @@ public class ApplicationInitConfig {
     @Bean
     ApplicationRunner applicationRunner(UserRepository userRepository) {
         return args -> {
-            if (userRepository.findByEmail("cunnconn01@gmail.com").isEmpty()) {
+            if (userRepository.findByEmail("nthanhhai219@gmail.com").isEmpty()) {
 
                 Roles adminRole = roleRepository.save(Roles.builder()
                         .name(PredefinedRole.ADMIN_ROLE)
@@ -38,7 +38,7 @@ public class ApplicationInitConfig {
                 roles.add(adminRole);
 
                 User user = User.builder()
-                        .email("cunnconn01@gmail.com")
+                        .email("nthanhhai219@gmail.com")
                         .password(passwordEncoder.encode("12345678"))
                         .roles(roles)
                         .build();

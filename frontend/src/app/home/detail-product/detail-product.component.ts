@@ -11,7 +11,7 @@ import {Cart} from '../../model/cart.model';
 import {format} from 'date-fns';
 import {jwtDecode} from 'jwt-decode';
 import {SharedDataService} from "../../service/shared-data.service";
-
+import { ReviewService } from '../../service/review.service';
 @Component({
   selector: 'app-detail-product',
   standalone: true,
@@ -30,13 +30,15 @@ export class DetailProductComponent implements OnInit {
   showPay: boolean = false;
   cart: Cart = new Cart();
   isVisible: boolean = false;
-
+  reviews: any[] = []; // Array to store reviews
+  newReview: { reviewerName: string; content: string; rating: number } = { reviewerName: '', content: '', rating: 5 };
   constructor(
     private cartService: CartService,
     private imgService: ImageService,
     private productService: ProductService,
     private Activeroute: ActivatedRoute,
     private vnPayService: VNPayService,
+    private reviewService: ReviewService
   ) {
   }
 
@@ -51,6 +53,7 @@ export class DetailProductComponent implements OnInit {
       this.product = data.result;
       if (this.product && this.product.product_id) {
         this.getImageFromService(this.product.image, this.product.product_id);
+        this.loadReviews();
       }
     });
   }
@@ -64,7 +67,20 @@ export class DetailProductComponent implements OnInit {
         });
     }
   }
-
+  loadReviews(): void {
+      this.reviewService.getReviewsByProductId(this.product.product_id).subscribe((data) => {
+        this.reviews = data;
+      });
+    }
+  submitReview(): void {
+      if (this.newReview.reviewerName && this.newReview.content && this.newReview.rating) {
+        this.reviewService.addReview(this.product.product_id, this.newReview).subscribe(() => {
+          alert('Review submitted successfully');
+          this.newReview = { reviewerName: '', content: '', rating: 5 }; // Reset form
+          this.loadReviews(); // Refresh reviews list
+        });
+      }
+    }
   addToCart() {
     const token = localStorage.getItem('auth_token') as string;
     const decodedToken = jwtDecode(token) as any;
